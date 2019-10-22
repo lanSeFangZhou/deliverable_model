@@ -1,11 +1,13 @@
+from pathlib import Path
+
 from deliverable_model.request import Request
 from deliverable_model.response import Response
 from deliverable_model.utils import class_from_module_path
 
 
 class Processor(object):
-    def __init__(self, model_path, metadata):
-        self.model_path = model_path
+    def __init__(self, asset_dir: Path, metadata):
+        self.asset_dir = asset_dir
         self.metadata = metadata
 
         self.processor_instance = {}
@@ -19,7 +21,12 @@ class Processor(object):
     def instance_processor(self):
         for instance_name, instance_build_info in self.metadata['instance'].items():
             class_ = class_from_module_path(instance_build_info['class'])
-            processor_instance = (class_(**instance_build_info.get('parameter', {})))
+            kwargs = instance_build_info.get('parameter', {})
+
+            instance_asset_dir = self.asset_dir / instance_name
+            kwargs['asset_dir'] = instance_asset_dir
+
+            processor_instance = (class_(**kwargs))
 
             self.processor_instance[instance_name] = processor_instance
 

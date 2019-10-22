@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import List, Dict
 
 from deliverable_model.processor_base import ProcessorBase
@@ -55,9 +56,12 @@ class ProcessorBuilder(object):
 
         self.build = True
 
-    def serialize(self, export_dir):
+    def serialize(self, asset_dir: Path):
         instance = {}
         for processor_instance_name, processor_instance in self.processor_instance_registry.items():
+            processor_instance_asset_dir = asset_dir / processor_instance_name
+            processor_instance.serialize(processor_instance_asset_dir)
+
             instance[processor_instance_name] = {
                 "class": get_class_fqn_name(processor_instance),
                 "parameter": processor_instance.get_config()

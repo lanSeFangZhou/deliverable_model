@@ -33,8 +33,8 @@ class ModelBuilder(object):
     def save(self):
         self.build = True
 
-    def serialize(self, export_dir: Path):
-        output_dir = export_dir / self.model.type
+    def serialize(self, asset_dir: Path):
+        output_dir = asset_dir / self.model.type
 
         shutil.copytree(self.model.store_dir, output_dir)
 

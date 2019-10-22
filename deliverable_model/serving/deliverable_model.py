@@ -64,13 +64,13 @@ class DeliverableModel(object):
         return self.metadata_object.get_meta_content()
 
     def _instance_processor(self):
-        self.processor_object = Processor.load(self.model_path, self.metadata['processor'])
+        self.processor_object = Processor.load(self.model_path / "asset" / "processor", self.metadata['processor'])
 
     def _instance_model(self):
-        self.model_object = Model.load(self.model_path, self.metadata['model'])
+        self.model_object = Model.load(self.model_path / "asset" / "model", self.metadata['model'])
 
     def _instance_metadata(self):
-        self.metadata_object = Metadata.load(self.model_path, self.metadata['metadata'])
+        self.metadata_object = Metadata.load(self.model_path / "asset" / "metadata", self.metadata['metadata'])
 
     def _call_preprocessor(self, request: Request) -> Request:
         return self.processor_object.call_preprocessor(request)

@@ -4,6 +4,7 @@ from pathlib import Path
 from deliverable_model.builder.metadata.metadata_builder import MetadataBuilder
 from deliverable_model.builder.model.model_builder import ModelBuilder
 from deliverable_model.builder.processor.processor_builder import ProcessorBuilder
+from deliverable_model.utils import create_dir_if_needed
 
 
 class DeliverableModelBuilder(object):
@@ -28,14 +29,20 @@ class DeliverableModelBuilder(object):
 
         export_data = {
             "dependency": dependency,
-            "processor": self.processor_builder.serialize(self.export_dir),
-            "model": self.model_builder.serialize(self.export_dir),
-            "metadata": self.metadata_builder.serialize(self.export_dir),
+            "processor": self.processor_builder.serialize(
+                create_dir_if_needed(self.export_dir / "asset" / "processor")
+            ),
+            "model": self.model_builder.serialize(
+                create_dir_if_needed(self.export_dir / "asset" / "model")
+            ),
+            "metadata": self.metadata_builder.serialize(
+                create_dir_if_needed(self.export_dir / "asset" / "metadata")
+            ),
         }
 
         metadata_file = self.export_dir / "metadata.json"
 
-        with metadata_file.open('wt') as fd:
+        with metadata_file.open("wt") as fd:
             json.dump(export_data, fd)
 
     def gather_dependency(self) -> list:

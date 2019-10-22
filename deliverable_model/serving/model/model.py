@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from deliverable_model.serving.model.model_loaders.model_loader_base import ModelLoaderBase
 from deliverable_model.serving.model.model_loaders.model_registry import get_model_loader_instance_by_type
 from deliverable_model.request import Request
@@ -9,9 +11,9 @@ class Model(object):
         self.model_loader_instance = model_loader_instance
 
     @classmethod
-    def load(cls, model_path, metadata) -> "Model":
+    def load(cls, asset_dir: Path, metadata) -> "Model":
         model_type = metadata['type']
-        model_loader_instance = get_model_loader_instance_by_type(model_type, model_path, metadata)
+        model_loader_instance = get_model_loader_instance_by_type(model_type, asset_dir, metadata)
 
         self = cls(model_loader_instance)
 
