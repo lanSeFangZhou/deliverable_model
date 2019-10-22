@@ -2,9 +2,9 @@ import json
 from pathlib import Path
 
 from deliverable_model.metacontent import MetaContent
-from deliverable_model.metadata.metadata import Metadata
-from deliverable_model.model.model import Model
-from deliverable_model.processor.processor import Processor
+from deliverable_model.serving.metadata.metadata import Metadata
+from deliverable_model.serving.model.model import Model
+from deliverable_model.serving.processor.processor import Processor
 from deliverable_model.request import Request
 from deliverable_model.response import Response
 

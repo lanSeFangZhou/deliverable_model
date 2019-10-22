@@ -1,5 +1,5 @@
-from deliverable_model.model.model_loaders.model_loader_base import ModelLoaderBase
-from deliverable_model.model.model_loaders.model_registry import get_model_loader_instance_by_type
+from deliverable_model.serving.model.model_loaders.model_loader_base import ModelLoaderBase
+from deliverable_model.serving.model.model_loaders.model_registry import get_model_loader_instance_by_type
 from deliverable_model.request import Request
 from deliverable_model.response import Response
 

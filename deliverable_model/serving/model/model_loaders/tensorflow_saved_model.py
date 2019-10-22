@@ -1,6 +1,6 @@
 from typing import Callable
 
-from deliverable_model.model.model_loaders.model_loader_base import ModelLoaderBase
+from deliverable_model.serving.model.model_loaders.model_loader_base import ModelLoaderBase
 from deliverable_model.request import Request
 from deliverable_model.response import Response
 
