@@ -1,3 +1,6 @@
+from deliverable_model.metacontent import MetaContent
+
+
 class MetadataBuilder(object):
     version = "1.0"
 
@@ -6,8 +9,8 @@ class MetadataBuilder(object):
         self.dependency = []
         self.build = False
 
-    def set_id(self, id_):
-        self.id = id_
+    def set_meta_content(self, meta_content: MetaContent):
+        self.id = meta_content.id
 
     def save(self):
         self.build = True

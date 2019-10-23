@@ -1,4 +1,6 @@
 import json
+import subprocess
+import sys
 from pathlib import Path
 
 from deliverable_model.metacontent import MetaContent
@@ -25,7 +27,7 @@ class DeliverableModel(object):
 
         cls._check_compatible(metadata)
 
-        cls._install_dependency()
+        cls._install_dependency(metadata)
 
         self = cls(model_path, metadata)
 
@@ -50,8 +52,9 @@ class DeliverableModel(object):
         pass
 
     @classmethod
-    def _install_dependency(cls):
-        pass
+    def _install_dependency(cls, metadata):
+        for dependency in metadata["dependency"]:
+            subprocess.check_call([sys.executable, '-m', 'pip', 'install', dependency])
 
     def parse(self, request: Request) -> Response:
         request = self._call_preprocessor(request)

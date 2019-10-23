@@ -8,6 +8,8 @@ from tensorflow.contrib import predictor
 
 
 class TensorFlowSavedModel(ModelLoaderBase):
+    name = "tensorflow_saved_model"
+
     def __init__(self, predictor_func: Callable):
         self.predictor_func = predictor_func
 

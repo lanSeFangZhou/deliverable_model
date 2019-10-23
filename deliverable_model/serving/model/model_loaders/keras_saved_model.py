@@ -8,6 +8,8 @@ import tensorflow as tf
 
 
 class KerasSavedModel(ModelLoaderBase):
+    name = "keras_saved_model"
+
     def __init__(self, predictor_func: Callable):
         self.predictor_func = predictor_func
 

@@ -62,4 +62,4 @@ def load_hook(hook_config):
 
 
 def get_class_fqn_name(obj):
-    return ".".join([obj.__module__, obj.__name__])
+    return ".".join([obj.__module__, obj.__class__.__name__])

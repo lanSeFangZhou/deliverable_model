@@ -10,7 +10,7 @@ class ModelBuilder(object):
 
     def __init__(self):
         self.model = None  # type: ModelInfo
-        self.dependency = []
+        self.dependency = ["tensorflow"]
 
     def add_keras_h5_model(self, model_dir):
         if self.model:
@@ -29,6 +29,12 @@ class ModelBuilder(object):
             raise ValueError()
 
         self.model = ModelInfo("keras_saved_model", model_dir)
+
+    def add_dummy_model(self, model_dir):
+        if self.model:
+            raise ValueError()
+
+        self.model = ModelInfo("dummy_model", model_dir)
 
     def save(self):
         self.build = True

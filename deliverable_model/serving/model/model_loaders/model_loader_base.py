@@ -3,6 +3,8 @@ from deliverable_model.response import Response
 
 
 class ModelLoaderBase(object):
+    name = None
+
     @classmethod
     def load(cls, model_path, metadata) -> "ModelLoaderBase":
         raise NotImplementedError

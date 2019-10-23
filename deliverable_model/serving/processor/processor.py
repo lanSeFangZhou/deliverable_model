@@ -18,15 +18,18 @@ class Processor(object):
 
         self.instance_processor()
 
+        return self
+
     def instance_processor(self):
         for instance_name, instance_build_info in self.metadata['instance'].items():
             class_ = class_from_module_path(instance_build_info['class'])
-            kwargs = instance_build_info.get('parameter', {})
+            parameter = instance_build_info.get('parameter', {})
+
+            class_load_method = getattr(class_, "load")
 
             instance_asset_dir = self.asset_dir / instance_name
-            kwargs['asset_dir'] = instance_asset_dir
 
-            processor_instance = (class_(**kwargs))
+            processor_instance = class_load_method(parameter=parameter, asset_dir=instance_asset_dir)
 
             self.processor_instance[instance_name] = processor_instance
 

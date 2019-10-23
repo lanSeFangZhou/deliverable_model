@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import List, Dict
 
 from deliverable_model.processor_base import ProcessorBase
-from deliverable_model.utils import get_class_fqn_name
+from deliverable_model.utils import get_class_fqn_name, create_dir_if_needed
 
 
 class ProcessorHandle(object):
@@ -28,7 +28,7 @@ class ProcessorBuilder(object):
         return ProcessorHandle(processor_name)
 
     def _get_processor_key(self, processor):
-        processor_class = type(processor)
+        processor_class = processor.__class__.__name__
         if processor_class not in self.processor_name_counter:
             self.processor_name_counter[processor_class] = 0
 
@@ -49,7 +49,7 @@ class ProcessorBuilder(object):
         for processor_instance in self.processor_instance_registry.values():
             dependency.extend(processor_instance.get_dependency())
 
-        return list(set(dependency))
+        return list(sorted(set(dependency)))
 
     def save(self):
         self.dependency = self._gather_dependency()
@@ -58,13 +58,18 @@ class ProcessorBuilder(object):
 
     def serialize(self, asset_dir: Path):
         instance = {}
-        for processor_instance_name, processor_instance in self.processor_instance_registry.items():
-            processor_instance_asset_dir = asset_dir / processor_instance_name
+        for (
+            processor_instance_name,
+            processor_instance,
+        ) in self.processor_instance_registry.items():
+            processor_instance_asset_dir = create_dir_if_needed(
+                asset_dir / processor_instance_name
+            )
             processor_instance.serialize(processor_instance_asset_dir)
 
             instance[processor_instance_name] = {
                 "class": get_class_fqn_name(processor_instance),
-                "parameter": processor_instance.get_config()
+                "parameter": processor_instance.get_config(),
             }
 
         pipeline = {"pre": [], "post": []}

@@ -12,8 +12,8 @@ class DeliverableModelBuilder(object):
         self.export_dir = Path(export_dir)
 
         self.processor_builder = None  # type: ProcessorBuilder
-        self.model_builder = None
-        self.metadata_builder = None
+        self.model_builder = None  # type: ModelBuilder
+        self.metadata_builder = None  # type: MetadataBuilder
 
     def add_metadata(self, metadata_builder: MetadataBuilder):
         self.metadata_builder = metadata_builder
@@ -45,5 +45,13 @@ class DeliverableModelBuilder(object):
         with metadata_file.open("wt") as fd:
             json.dump(export_data, fd)
 
+        return export_data
+
     def gather_dependency(self) -> list:
-        pass
+        dependency = []
+
+        dependency.extend(self.metadata_builder.get_dependency())
+        dependency.extend(self.model_builder.get_dependency())
+        dependency.extend(self.processor_builder.get_dependency())
+
+        return list(sorted(set(dependency)))

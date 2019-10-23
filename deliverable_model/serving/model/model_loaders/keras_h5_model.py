@@ -8,6 +8,8 @@ import tensorflow as tf
 
 
 class KerasH5Model(ModelLoaderBase):
+    name = "keras_h5_model"
+
     def __init__(self, predictor_func: Callable):
         self.predictor_func = predictor_func
 
@@ -21,4 +23,8 @@ class KerasH5Model(ModelLoaderBase):
 
     def parse(self, request: Request) -> Response:
         # TODO: fix me
-        return self.predictor_func(request.query)
+        result = self.predictor_func(request.query)
+
+        response = Response(result)
+
+        return response
