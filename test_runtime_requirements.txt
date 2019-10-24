@@ -1,2 +1,2 @@
 seq2annotation
-tensorflow
+tensorflow==1.15
