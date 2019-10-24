@@ -25,6 +25,7 @@ steps:
   displayName: 'Install depdnencies'
 
 - script: |
+    pip install -r ./test_runtime_requirements.txt
     make test
   displayName: 'run test'
 
