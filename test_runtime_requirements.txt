@@ -1,2 +1,2 @@
-seq2annotation
+s2a-nightly
 tensorflow==1.15
