@@ -30,6 +30,7 @@ def test_build(datadir, tmpdir):
     assert not dircmp_obj.diff_files
 
     assert config == {
+        "version": "1.0",
         "instance": {
             "LookupProcessor_0": {
                 "class": "deliverable_model.builtin.processor.lookup_processor.LookupProcessor",

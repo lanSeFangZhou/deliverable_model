@@ -51,8 +51,10 @@ def test_build(datadir, tmpdir):
     metadata = deliverable_model_builder.save()
 
     assert metadata == {
+        "version": "1.0",
         "dependency": ["seq2annotation", "tensorflow"],
         "processor": {
+            "version": "1.0",
             "instance": {
                 "LookupProcessor_0": {
                     "class": "deliverable_model.builtin.processor.lookup_processor.LookupProcessor",

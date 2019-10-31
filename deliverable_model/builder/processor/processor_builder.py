@@ -80,7 +80,7 @@ class ProcessorBuilder(object):
         for processor_instance_name in self.postprocess_pipeline:
             pipeline["post"].append(processor_instance_name)
 
-        return {"instance": instance, "pipeline": pipeline}
+        return {"version": "1.0", "instance": instance, "pipeline": pipeline}
 
     def get_dependency(self):
         return self.dependency

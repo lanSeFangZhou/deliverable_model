@@ -28,6 +28,7 @@ class DeliverableModelBuilder(object):
         dependency = self.gather_dependency()
 
         export_data = {
+            "version": "1.0",
             "dependency": dependency,
             "processor": self.processor_builder.serialize(
                 create_dir_if_needed(self.export_dir / "asset" / "processor")
