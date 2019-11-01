@@ -60,8 +60,6 @@ class LookupProcessor(ProcessorBase):
         self.lookup_table_registry[name] = lookup_table_object
 
     def preprocess(self, request: Request) -> Request:
-        import tensorflow as tf
-
         vocabulary_lookup_table = self.lookup_table_registry["vocabulary"]
 
         query_id_list = []
@@ -69,17 +67,11 @@ class LookupProcessor(ProcessorBase):
             query_item_id = [vocabulary_lookup_table.lookup(i) for i in query_item]
             query_id_list.append(query_item_id)
 
-        padded_query_id_list = tf.keras.preprocessing.sequence.pad_sequences(
-            query_id_list, **self.padding_parameter
-        )
-
-        request.update_query(padded_query_id_list)
+        request.update_query(query_id_list)
 
         return request
 
     def postprocess(self, response: Response) -> Response:
-        import tensorflow as tf
-
         tag_lookup_table = self.lookup_table_registry["tag"]
 
         data_str_list = []
@@ -97,4 +89,4 @@ class LookupProcessor(ProcessorBase):
             obj.dump_to_file(instance_asset)
 
     def get_dependency(self) -> list:
-        return ["tensorflow", "seq2annotation"]
+        return ["seq2annotation"]

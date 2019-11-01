@@ -42,7 +42,7 @@ class Processor(object):
         return request
 
     def call_postprocessor(self, response: Response) -> Response:
-        for processor_instance_name in self.metadata['pipeline']['pre']:
+        for processor_instance_name in self.metadata['pipeline']['post']:
             processor_instance = self.processor_instance[processor_instance_name]
             preprocessor_method = getattr(processor_instance, 'postprocess')
             response = preprocessor_method(response)
