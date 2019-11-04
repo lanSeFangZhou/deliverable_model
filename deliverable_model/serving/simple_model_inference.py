@@ -1,16 +1,15 @@
-from typing import Tuple, Union, List
+from typing import Union, List, Iterator
 
 from tqdm import tqdm
 
 from deliverable_model.builtin.processor.biluo_decode_processor import PredictResult
 from micro_toolkit.data_process.batch_iterator import BatchingIterator
-from tokenizer_tools.tagset.offset.sequence import Sequence
 
 from deliverable_model.request import Request
 from deliverable_model.serving import DeliverableModel
 
 
-class SimpleModelInference(object):
+class SimpleModelInference:
     def __init__(self, model_dir, batch_size=1):
         self.batch_size = batch_size
 
@@ -27,8 +26,10 @@ class SimpleModelInference(object):
         for predict_info in response_obj.data:
             yield predict_info
 
-    def parse(self, msg_list: Union[List[str], List[List[str]]]) -> Tuple[Sequence, PredictResult]:
+    def parse(
+        self, msg_list: Union[List[str], List[List[str]]]
+    ) -> Iterator[PredictResult]:
         bi = BatchingIterator(self.batch_size)
         for i in tqdm(bi(msg_list)):
-            for j in zip(i, self._parse(i)):
+            for j in self._parse(i):
                 yield j
