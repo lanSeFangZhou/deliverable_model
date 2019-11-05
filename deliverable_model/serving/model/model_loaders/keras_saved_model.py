@@ -11,8 +11,10 @@ class KerasSavedModel(ModelLoaderBase):
     @classmethod
     def load(cls, model_path: Path, metadata):
         model = tf.keras.experimental.load_from_saved_model(str(model_path))
+
+        # patch for thread safety issue, but it seems don't work
         model._make_predict_function()
 
-        self = cls(model.predict)
+        self = cls(model.predict_on_batch)
 
         return self
