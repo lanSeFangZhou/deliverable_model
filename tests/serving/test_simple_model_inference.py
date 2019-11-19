@@ -10,4 +10,4 @@ def test_serving(datadir):
 
     expected = [["tag-a", "tag-b", "tag-c"], ["tag-c", "tag-b", "tag-a"]]
 
-    assert [i[1] for i in response] == expected
+    assert response == expected

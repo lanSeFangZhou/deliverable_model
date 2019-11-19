@@ -6,7 +6,7 @@ import numpy as np
 
 
 def test_serving(datadir):
-    metadata = {'version': '1.0', 'type': 'dummy_model'}
+    metadata = {'version': '1.0', 'type': 'dummy_model', "custom_object_dependency": [], "converter_for_request": "", "converter_for_response": ""}
     model_obj = Model.load(datadir, metadata)
 
     request = Request([[1, 2, 3], [3, 2, 1]])

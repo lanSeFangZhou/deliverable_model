@@ -31,8 +31,8 @@
         "version": "1.0",
         "type": "dummy_model",
         "custom_object_dependency": [],
-        "converter_for_request": "converter_for_request",
-        "converter_for_response": "converter_for_response"
+        "converter_for_request": "",
+        "converter_for_response": ""
     },
     "metadata": {
         "version": "1.0",

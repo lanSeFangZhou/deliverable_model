@@ -66,7 +66,13 @@ def test_build(datadir, tmpdir):
             },
             "pipeline": {"pre": ["LookupProcessor_0"], "post": ["LookupProcessor_0"]},
         },
-        "model": {"version": "1.0", "type": "keras_h5_model"},
+        "model": {
+            "version": "1.0",
+            "type": "keras_h5_model",
+            "custom_object_dependency": [],
+            "converter_for_request": "converter_for_request",
+            "converter_for_response": "converter_for_response",
+        },
         "metadata": {"version": "1.0", "id": "algorithmId-corpusId-configId-runId"},
     }
 

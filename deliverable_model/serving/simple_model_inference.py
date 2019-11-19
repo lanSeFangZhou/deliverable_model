@@ -1,7 +1,8 @@
-from typing import Union, List, Iterator
+from typing import Union, List, Iterator, Dict
 
 from tqdm import tqdm
 
+from deliverable_model.metacontent import MetaContent
 from deliverable_model.builtin.processor.biluo_decode_processor import PredictResult
 from micro_toolkit.data_process.batch_iterator import BatchingIterator
 
@@ -33,3 +34,11 @@ class SimpleModelInference:
         for i in tqdm(bi(msg_list)):
             for j in self._parse(i):
                 yield j
+
+    @property
+    def model_metadata(self) -> Dict:
+        return self.server.model_metadata
+
+    @property
+    def metadata(self) -> MetaContent:
+        return self.server.metadata()

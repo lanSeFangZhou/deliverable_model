@@ -37,10 +37,10 @@ class Model(object):
 
         converter_for_request = cls._load_function(
             asset_dir / metadata["converter_for_request"]
-        )
+        ) if metadata.get("converter_for_request") else lambda x: x  # for more easy to test
         converter_for_response = cls._load_function(
             asset_dir / metadata["converter_for_response"]
-        )
+        ) if metadata.get("custom_object_dependency") else lambda x: x  # for more easy to test
 
         self = cls(model_loader_instance, converter_for_request, converter_for_response)
 

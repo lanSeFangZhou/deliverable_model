@@ -7,5 +7,3 @@ __email__ = 'u1mail2me@gmail.com'
 __version__ = '0.1.3'
 
 import deliverable_model.serving  # for auto registry
-
-from deliverable_model.metacontent import MetaContent

@@ -43,5 +43,5 @@ def test_build(datadir, tmpdir):
         "pipeline": {"pre": ["LookupProcessor_0"], "post": ["LookupProcessor_0"]},
     }
 
-    assert processor_builder.get_dependency() == ["seq2annotation", "tensorflow"]
+    assert processor_builder.get_dependency() == ["seq2annotation"]
 
