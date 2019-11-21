@@ -11,7 +11,7 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ["dill", "micro-toolkit", "tqdm", "tensorflow>=1.15.0,<2.0.0"]
+requirements = ["dill", "micro-toolkit", "tqdm", "tensorflow>=1.15.0,<2.0.0", "seq2annotation"]
 
 setup_requirements = ['pytest-runner', ]
 
