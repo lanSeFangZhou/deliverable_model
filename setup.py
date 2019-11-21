@@ -15,7 +15,7 @@ requirements = ["dill", "micro-toolkit", "tqdm", "tensorflow>=1.15.0,<2.0.0", "s
 
 setup_requirements = ['pytest-runner', ]
 
-test_requirements = ['pytest>=3', ]
+test_requirements = ['pytest>=3', "pytest-datadir"]
 
 setup(
     author="Xiaoquan Kong",
