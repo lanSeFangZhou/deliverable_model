@@ -31,7 +31,7 @@ class SimpleModelInference:
         self, msg_list: Union[List[str], List[List[str]]]
     ) -> Iterator[PredictResult]:
         bi = BatchingIterator(self.batch_size)
-        for i in tqdm(bi(msg_list)):
+        for i in tqdm(bi(msg_list), disable=None):
             for j in self._parse(i):
                 yield j
 
