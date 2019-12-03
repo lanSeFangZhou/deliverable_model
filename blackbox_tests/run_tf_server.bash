@@ -1,0 +1,1 @@
+docker run -it --rm -p 8501:8501 -p 8500:8500 -v "/home/howl/PycharmProjects/deliverable_model/results/deliverable_model/asset/model/tensorflow_saved_model:/models/estimator_ner" -e MODEL_NAME=estimator_ner howl/tensorflow-serving  --enable_batching --batching_parameters_file="/models/estimator_ner/batching_parameters_file"

@@ -4,8 +4,10 @@ from deliverable_model.serving.model.model_loaders.keras_h5_model import KerasH5
 from deliverable_model.serving.model.model_loaders.tensorflow_saved_model import TensorFlowSavedModel
 from deliverable_model.serving.model.model_loaders.keras_saved_model import KerasSavedModel
 from deliverable_model.serving.model.model_loaders.dummy_model import DummyModel
+from deliverable_model.serving.model.model_loaders.remote_tensorflow_serving_model import RemoveTensorFlowServingModel
 
 register_model_loader(KerasH5Model.name, KerasH5Model)
 register_model_loader(TensorFlowSavedModel.name, TensorFlowSavedModel)
 register_model_loader(KerasSavedModel.name, KerasSavedModel)
 register_model_loader(DummyModel.name, DummyModel)
+register_model_loader(RemoveTensorFlowServingModel.name, RemoveTensorFlowServingModel)

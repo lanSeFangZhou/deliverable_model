@@ -1,6 +1,7 @@
 import importlib
+import os
 from pathlib import Path
-from typing import Callable, Any
+from typing import Callable, Any, Dict
 
 from deliverable_model.serving.model.model_loaders.model_loader_base import (
     ModelLoaderBase,
@@ -27,6 +28,23 @@ class Model(object):
 
     @classmethod
     def load(cls, asset_dir: Path, metadata) -> "Model":
+        remote_tf_serving = os.environ.get("REMOTE_TF_SERVING")
+        if remote_tf_serving is not None:
+            return cls._load_remote_tf_serving(asset_dir, metadata)
+
+        return cls._load_local_model(asset_dir, metadata)
+
+    @classmethod
+    def _load_remote_tf_serving(cls, asset_dir: Path, metadata):
+        assert metadata["type"] in ["tensorflow_saved_model"]
+
+        # change model type
+        metadata["type"] = "remote_tensorflow_serving_model"
+
+        return cls._load_local_model(asset_dir, metadata)
+
+    @classmethod
+    def _load_local_model(cls, asset_dir: Path, metadata):
         # load custom dependency to trigger auto registry for keras
         cls._load_custom_object_dependency(metadata["custom_object_dependency"])
 
@@ -35,12 +53,16 @@ class Model(object):
             model_type, asset_dir, metadata
         )
 
-        converter_for_request = cls._load_function(
-            asset_dir / metadata["converter_for_request"]
-        ) if metadata.get("converter_for_request") else lambda x: x  # for more easy to test
-        converter_for_response = cls._load_function(
-            asset_dir / metadata["converter_for_response"]
-        ) if metadata.get("converter_for_response") else lambda x: x  # for more easy to test
+        converter_for_request = (
+            cls._load_function(asset_dir / metadata["converter_for_request"])
+            if metadata.get("converter_for_request")
+            else lambda x: x
+        )  # for more easy to test
+        converter_for_response = (
+            cls._load_function(asset_dir / metadata["converter_for_response"])
+            if metadata.get("converter_for_response")
+            else lambda x: x
+        )  # for more easy to test
 
         self = cls(model_loader_instance, converter_for_request, converter_for_response)
 

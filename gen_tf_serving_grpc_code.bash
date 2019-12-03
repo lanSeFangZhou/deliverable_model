@@ -1,0 +1,1 @@
+python -m grpc_tools.protoc -I ../../CLionProjects/tensorflow_serving-1.15.0 -I ../tensorflow-1.15.0 --python_out=. --grpc_python_out=. ../../CLionProjects/tensorflow_serving-1.15.0/tensorflow_serving/apis/*.proto
