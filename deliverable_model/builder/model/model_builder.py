@@ -1,3 +1,4 @@
+import os
 import shutil
 from collections import namedtuple
 from pathlib import Path
@@ -27,16 +28,16 @@ class ModelBuilder(object):
     version = "1.0"
 
     def __init__(self):
-        self.model = None  # type: ModelInfo
+        self.model: ModelInfo = None
         self.dependency = ["tensorflow"]
         self.custom_object_dependency = []
 
-        self.converter_for_request = (
+        self.converter_for_request: Callable[[Request], Any] = (
             simple_converter_for_request
-        )  # type: Callable[[Request], Any]
-        self.converter_for_response = (
+        )
+        self.converter_for_response: Callable[[Any], Response] = (
             simple_converter_for_response
-        )  # type: Callable[[Any], Response]
+        )
 
     def add_keras_h5_model(self, model_dir):
         if self.model:
@@ -44,11 +45,14 @@ class ModelBuilder(object):
 
         self.model = ModelInfo("keras_h5_model", model_dir)
 
-    def add_tensorflow_saved_model(self, model_dir):
+    def add_tensorflow_saved_model(self, model_dir: str):
         if self.model:
             raise ValueError()
 
-        self.model = ModelInfo("tensorflow_saved_model", model_dir)
+        # model_dir is dir to model, we need a timestamp versioned model info
+        timestamp_versioned_model_dir = os.path.dirname(model_dir)
+
+        self.model = ModelInfo("tensorflow_saved_model", timestamp_versioned_model_dir)
 
     def add_keras_saved_model(self, model_dir):
         if self.model:
