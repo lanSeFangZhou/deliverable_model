@@ -8,7 +8,7 @@ class ProcessorBase(object):
     def get_config(self):
         return {}
 
-    def load(self, parameter, asset_dir) -> "ProcessorBase":
+    def load(self, parameter: dict, asset_dir: Path) -> "ProcessorBase":
         raise NotImplementedError
 
     def preprocess(self, request: Request) -> Request:

@@ -8,12 +8,12 @@ from deliverable_model.utils import create_dir_if_needed
 
 
 class DeliverableModelBuilder(object):
-    def __init__(self, export_dir):
+    def __init__(self, export_dir: str):
         self.export_dir = Path(export_dir)
 
-        self.processor_builder = None  # type: ProcessorBuilder
-        self.model_builder = None  # type: ModelBuilder
-        self.metadata_builder = None  # type: MetadataBuilder
+        self.processor_builder: ProcessorBuilder = None
+        self.model_builder: ModelBuilder = None
+        self.metadata_builder: MetadataBuilder = None
 
     def add_metadata(self, metadata_builder: MetadataBuilder):
         self.metadata_builder = metadata_builder
@@ -49,6 +49,9 @@ class DeliverableModelBuilder(object):
         return export_data
 
     def gather_dependency(self) -> list:
+        """
+        Get all the python package dependency
+        """
         dependency = []
 
         dependency.extend(self.metadata_builder.get_dependency())

@@ -11,6 +11,8 @@ class TensorFlowSavedModel(ModelLoaderBase):
 
     @classmethod
     def load(cls, model_path: Path, metadata):
+        # TODO(howl-anderson): contrib is not available at TF 2.x and TF enterprise,
+        # find alternative for `predictor`
         from tensorflow.contrib import predictor
 
         concrete_model_path = cls._get_model(model_path)
@@ -27,6 +29,13 @@ class TensorFlowSavedModel(ModelLoaderBase):
 
     @staticmethod
     def _find_most_recent_model(model_path: Path) -> Path:
+        """
+        find most recent model by directory name.
+
+        In saved model, model directories are named after export date-time,
+        such like `202002280029`.
+        """
+
         def get_version(model_path: Path) -> Union[int, None]:
             dir_name = model_path.name
             if dir_name.isnumeric():

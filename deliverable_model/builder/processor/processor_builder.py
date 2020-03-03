@@ -6,17 +6,21 @@ from deliverable_model.utils import get_class_fqn_name, create_dir_if_needed
 
 
 class ProcessorHandle(object):
+    """
+    A object that present a processor instance already registered.
+    """
+
     def __init__(self, processor_instance: str):
         self.processor_instance = processor_instance
 
 
 class ProcessorBuilder(object):
     def __init__(self):
-        self.processor_instance_registry = {}  # type: Dict[str, ProcessorBase]
-        self.preprocess_pipeline = []  # type: List[str]
-        self.postprocess_pipeline = []  # type: List[str]
-        self.dependency = []  # type: List[str]
-        self.build = False
+        self.processor_instance_registry: Dict[str, ProcessorBase] = {}
+        self.preprocess_pipeline: List[str] = []
+        self.postprocess_pipeline: List[str] = []
+        self.dependency: List[str] = []
+        self.build: bool = False
 
         self.processor_name_counter = {}
 
@@ -27,7 +31,10 @@ class ProcessorBuilder(object):
 
         return ProcessorHandle(processor_name)
 
-    def _get_processor_key(self, processor):
+    def _get_processor_key(self, processor) -> str:
+        """
+        get unique name for processor instance
+        """
         processor_class = processor.__class__.__name__
         if processor_class not in self.processor_name_counter:
             self.processor_name_counter[processor_class] = 0
@@ -39,9 +46,15 @@ class ProcessorBuilder(object):
         return "{}_{}".format(processor_class, current_count)
 
     def add_preprocess(self, processor: ProcessorHandle):
+        """
+        Add processor to preprocess pipeline, append to tail
+        """
         self.preprocess_pipeline.append(processor.processor_instance)
 
     def add_postprocess(self, processor: ProcessorHandle):
+        """
+        Add processor to postprocess pipeline, append to head
+        """
         self.postprocess_pipeline.insert(0, processor.processor_instance)
 
     def _gather_dependency(self) -> list:
@@ -72,13 +85,7 @@ class ProcessorBuilder(object):
                 "parameter": processor_instance.get_config(),
             }
 
-        pipeline = {"pre": [], "post": []}
-
-        for processor_instance_name in self.preprocess_pipeline:
-            pipeline["pre"].append(processor_instance_name)
-
-        for processor_instance_name in self.postprocess_pipeline:
-            pipeline["post"].append(processor_instance_name)
+        pipeline = {"pre": self.preprocess_pipeline, "post": self.postprocess_pipeline}
 
         return {"version": "1.0", "instance": instance, "pipeline": pipeline}
 

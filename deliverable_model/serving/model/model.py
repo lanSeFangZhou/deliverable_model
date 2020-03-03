@@ -1,6 +1,6 @@
 import importlib
 from pathlib import Path
-from typing import Callable, Any
+from typing import Callable, Any, List
 
 from deliverable_model.serving.model.model_loaders.model_loader_base import (
     ModelLoaderBase,
@@ -8,6 +8,7 @@ from deliverable_model.serving.model.model_loaders.model_loader_base import (
 from deliverable_model.serving.model.model_loaders.model_registry import (
     get_model_loader_instance_by_type,
 )
+from deliverable_model.utils import class_from_module_path
 from deliverable_model.request import Request
 from deliverable_model.response import Response
 from dill import load
@@ -35,12 +36,8 @@ class Model(object):
             model_type, asset_dir, metadata
         )
 
-        converter_for_request = cls._load_function(
-            asset_dir / metadata["converter_for_request"]
-        ) if metadata.get("converter_for_request") else lambda x: x  # for more easy to test
-        converter_for_response = cls._load_function(
-            asset_dir / metadata["converter_for_response"]
-        ) if metadata.get("converter_for_response") else lambda x: x  # for more easy to test
+        converter_for_request = cls._load_converter(metadata["converter_for_request"])
+        converter_for_response = cls._load_converter(metadata["converter_for_response"])
 
         self = cls(model_loader_instance, converter_for_request, converter_for_response)
 
@@ -56,11 +53,20 @@ class Model(object):
         return response
 
     @classmethod
-    def _load_custom_object_dependency(cls, custom_object_dependency):
+    def _load_custom_object_dependency(cls, custom_object_dependency: List[str]):
+        """
+        import module from a list of object list
+        """
         for dependency in custom_object_dependency:
             importlib.import_module(dependency)
 
     @classmethod
-    def _load_function(cls, serialized_file: Path) -> Callable:
-        with serialized_file.open("rb") as fd:
-            return load(fd)
+    def _load_converter(cls, config):
+        class_ = class_from_module_path(config["class_name"])
+        parameter = config.get("config", {})
+
+        class_load_method = getattr(class_, "from_config")
+
+        instance = class_load_method(parameter=parameter)
+
+        return instance

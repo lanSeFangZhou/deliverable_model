@@ -50,10 +50,21 @@ class DeliverableModel(object):
 
     @classmethod
     def _check_compatible(cls, metadata):
+        """
+        check if version is compatible
+
+        if check pass nothing happen, otherwise raise a exception
+        """
+        # TODO(howl-anderson): implement this
         pass
 
     @classmethod
     def _install_dependency(cls, metadata):
+        """
+        install python packages according to metadata
+
+        if install failed, an exception will raise.
+        """
         for dependency in metadata["dependency"]:
             subprocess.check_call([sys.executable, '-m', 'pip', 'install', dependency])
 

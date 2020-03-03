@@ -73,15 +73,13 @@ class ModelBuilder(object):
         self.converter_for_response = func
 
     @staticmethod
-    def _dump_function(
-        assert_dir: Path, serialized_file_name: str, func: Callable
-    ) -> str:
-        serialized_file = assert_dir / serialized_file_name
-
-        with serialized_file.open("wb") as fd:
-            dump(func, fd)
-
-        return serialized_file_name
+    def _dump_converter(
+        func: Callable
+    ) -> dict:
+        return {
+            "class_name": func.__class__.__name__,
+            "config": func.get_config()
+        }
 
     def save(self):
         self.build = True
@@ -93,14 +91,10 @@ class ModelBuilder(object):
 
         return {
             "version": self.version,
-            "type": self.model[0],
+            "type": self.model.type,
             "custom_object_dependency": self.custom_object_dependency,
-            "converter_for_request": self._dump_function(
-                asset_dir, "converter_for_request", self.converter_for_request
-            ),
-            "converter_for_response": self._dump_function(
-                asset_dir, "converter_for_response", self.converter_for_response
-            ),
+            "converter_for_request": self._dump_converter(self.converter_for_request),
+            "converter_for_response": self._dump_converter(self.converter_for_response),
         }
 
     def get_dependency(self):

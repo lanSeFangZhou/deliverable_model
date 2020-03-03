@@ -1,6 +1,8 @@
 from pathlib import Path
 
-from deliverable_model.serving.model.model_loaders.model_loader_base import ModelLoaderBase
+from deliverable_model.serving.model.model_loaders.model_loader_base import (
+    ModelLoaderBase,
+)
 
 _model_registry = {}
 
@@ -12,12 +14,16 @@ def get_model_loader_class_by_type(model_type) -> ModelLoaderBase:
     return model_loader_class
 
 
-def get_model_loader_instance_by_type(model_type, asset_dir: Path, metadata) -> ModelLoaderBase:
+def get_model_loader_instance_by_type(
+    model_type, asset_dir: Path, metadata
+) -> ModelLoaderBase:
     model_loader_class = get_model_loader_class_by_type(model_type)
 
     model_path = asset_dir / model_type
 
-    model_loader_instance = getattr(model_loader_class, 'load')(model_path, metadata)
+    model_load_func = getattr(model_loader_class, "load")
+
+    model_loader_instance = model_load_func(model_path, metadata)
 
     return model_loader_instance
 
