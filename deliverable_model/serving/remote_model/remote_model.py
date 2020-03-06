@@ -4,14 +4,16 @@ from typing import Any, Callable, List
 
 from deliverable_model.request import Request
 from deliverable_model.response import Response
-from deliverable_model.serving.model.model_loaders.model_loader_base import \
-    ModelLoaderBase
-from deliverable_model.serving.model.model_loaders.model_registry import \
-    get_model_loader_instance_by_type
+from deliverable_model.serving.model.model_loaders.model_loader_base import (
+    ModelLoaderBase,
+)
+from deliverable_model.serving.remote_model.model_registry import (
+    get_endpoint_instance_by_type,
+)
 from deliverable_model.utils import class_from_module_path
 
 
-class Model(object):
+class RemoteModel(object):
     def __init__(
         self,
         model_loader_instance: ModelLoaderBase,
@@ -24,13 +26,13 @@ class Model(object):
         self.converter_for_response = converter_for_response
 
     @classmethod
-    def load(cls, asset_dir: Path, metadata) -> "Model":
+    def load(cls, metadata, config) -> "Model":
         # load custom dependency to trigger auto registry for keras
         cls._load_custom_object_dependency(metadata["custom_object_dependency"])
 
         model_type = metadata["type"]
-        model_loader_instance = get_model_loader_instance_by_type(
-            model_type, asset_dir, metadata
+        model_loader_instance = get_endpoint_instance_by_type(
+            model_type, metadata, config
         )
 
         converter_for_request = cls._load_converter(metadata["converter_for_request"])
