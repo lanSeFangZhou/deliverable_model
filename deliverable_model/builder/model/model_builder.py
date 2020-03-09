@@ -5,8 +5,8 @@ from pathlib import Path
 import typing
 from typing import List, Any, Callable
 
+from deliverable_model import utils
 from deliverable_model.request import Request
-from dill import dump
 
 if typing.TYPE_CHECKING:
     from deliverable_model.response import Response
@@ -73,12 +73,10 @@ class ModelBuilder(object):
         self.converter_for_response = func
 
     @staticmethod
-    def _dump_converter(
-        func: Callable
-    ) -> dict:
+    def _dump_converter(func: Callable) -> dict:
         return {
-            "class_name": func.__class__.__name__,
-            "config": func.get_config()
+            "class_name": utils.get_class_fqn_name(func),
+            "config": func.get_config(),
         }
 
     def save(self):

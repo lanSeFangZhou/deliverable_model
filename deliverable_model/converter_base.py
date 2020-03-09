@@ -6,8 +6,8 @@ class ConverterBase:
         raise NotImplementedError
 
     def get_config(self) -> dict:
-        raise NotImplementedError
+        return {}
 
     @classmethod
     def from_config(cls, config) -> "ConverterBase":
-        raise NotImplementedError
+        return cls(**config)

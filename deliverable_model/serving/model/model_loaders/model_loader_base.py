@@ -12,6 +12,6 @@ class ModelLoaderBase(object):
     def load(cls, model_path, metadata) -> "ModelLoaderBase":
         raise NotImplementedError
 
-    def parse(self, request: Any) -> Any:
+    def inference(self, request: Any) -> Any:
         predict_result = self.predictor_func(request)
         return predict_result

@@ -38,7 +38,7 @@ class DummyModel(ModelLoaderBase):
 
         return self
 
-    def parse(self, request: Request) -> Response:
+    def inference(self, request: Request) -> Response:
         result = self.predictor_func(request.query)
 
         response = Response(result)
