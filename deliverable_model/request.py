@@ -5,6 +5,7 @@ class Request(object):
     """
     Represent a list of request object
     """
+
     def __init__(self, query: List[Any]):
         self.query_history = []
         self.query = query

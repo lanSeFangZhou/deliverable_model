@@ -1,4 +1,3 @@
-
 import deliverable_model as dm
 
 endpoint_config = dm.make_endpoint_config(target="127.0.0.1:8500", model_name="ner")

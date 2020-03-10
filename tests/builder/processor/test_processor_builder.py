@@ -44,4 +44,3 @@ def test_build(datadir, tmpdir):
     }
 
     assert processor_builder.get_dependency() == ["seq2annotation"]
-

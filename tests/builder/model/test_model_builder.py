@@ -16,9 +16,13 @@ def test_build(datadir, tmpdir):
 
     assert config == {
         "converter_for_request": {
-            'class_name': 'deliverable_model.builder.model.model_builder.SimpleConverterForRequest', 'config': {}},
+            "class_name": "deliverable_model.builder.model.model_builder.SimpleConverterForRequest",
+            "config": {},
+        },
         "converter_for_response": {
-            'class_name': 'deliverable_model.builder.model.model_builder.SimpleConverterForResponse', 'config': {}},
+            "class_name": "deliverable_model.builder.model.model_builder.SimpleConverterForResponse",
+            "config": {},
+        },
         "custom_object_dependency": [],
         "type": "keras_h5_model",
         "version": "1.0",

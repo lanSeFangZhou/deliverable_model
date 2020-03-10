@@ -23,7 +23,9 @@ def test_build(datadir, tmpdir):
 
     lookup_processor.serialize(tmpdir)
 
-    match, mismatch, errors = filecmp.cmpfiles(datadir, tmpdir, ["tag", "vocabulary"], shallow=False)
+    match, mismatch, errors = filecmp.cmpfiles(
+        datadir, tmpdir, ["tag", "vocabulary"], shallow=False
+    )
 
     assert len(match) == 2
 

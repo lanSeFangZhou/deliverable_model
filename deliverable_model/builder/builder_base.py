@@ -9,7 +9,6 @@ class BuilderBase:
         """
         raise NotImplementedError
 
-
     def get_dependency(self) -> list:
         """
         Return python package dependency for builder
