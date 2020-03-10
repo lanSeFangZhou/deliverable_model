@@ -70,10 +70,14 @@ def test_build(datadir, tmpdir):
             "version": "1.0",
             "type": "keras_h5_model",
             "custom_object_dependency": [],
-            "converter_for_request": {'class_name': 'deliverable_model.builder.model.model_builder.SimpleConverterForRequest',
-                                     'config': {}},
-            "converter_for_response": {'class_name': 'deliverable_model.builder.model.model_builder.SimpleConverterForResponse',
-                                      'config': {}},
+            "converter_for_request": {
+                "class_name": "deliverable_model.builder.model.model_builder.SimpleConverterForRequest",
+                "config": {},
+            },
+            "converter_for_response": {
+                "class_name": "deliverable_model.builder.model.model_builder.SimpleConverterForResponse",
+                "config": {},
+            },
         },
         "metadata": {"version": "1.0", "id": "algorithmId-corpusId-configId-runId"},
     }

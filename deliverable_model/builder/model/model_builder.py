@@ -23,11 +23,14 @@ class SimpleConverterForRequest(ConverterBase):
 
 simple_converter_for_request = SimpleConverterForRequest()
 
+
 class SimpleConverterForResponse(ConverterBase):
-    def call(self, response:Response):
+    def call(self, response: Response):
         return response.data
 
+
 simple_converter_for_response = SimpleConverterForResponse()
+
 
 class ModelBuilder(object):
     version = "1.0"
@@ -81,8 +84,8 @@ class ModelBuilder(object):
     def _dump_converter(func: Callable) -> dict:
         return {
             "class_name": utils.get_class_fqn_name(func),
-            #TODO this function not exist
-             "config": func.get_config(),
+            # TODO this function not exist
+            "config": func.get_config(),
         }
 
     def save(self):

@@ -18,4 +18,3 @@ def test_build(datadir, tmpdir):
     assert config == {"version": "1.0", "id": "algorithmId-corpusId-configId-runId"}
 
     assert metadata_builder.get_dependency() == []
-
