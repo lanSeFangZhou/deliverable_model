@@ -2,7 +2,9 @@ from pathlib import Path
 
 import tensorflow as tf
 
-from deliverable_model.serving.model.model_loaders.model_loader_base import ModelLoaderBase
+from deliverable_model.serving.model.model_loaders.model_loader_base import (
+    ModelLoaderBase,
+)
 
 
 class KerasSavedModel(ModelLoaderBase):

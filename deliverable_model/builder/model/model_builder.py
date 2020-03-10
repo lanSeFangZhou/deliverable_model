@@ -6,7 +6,9 @@ import typing
 from typing import List, Any, Callable
 
 from deliverable_model import utils
+from deliverable_model.converter_base import ConverterBase
 from deliverable_model.request import Request
+from deliverable_model.response import Response
 
 if typing.TYPE_CHECKING:
     from deliverable_model.response import Response
@@ -14,14 +16,20 @@ if typing.TYPE_CHECKING:
 ModelInfo = namedtuple("ModelInfo", ["type", "store_dir"])
 
 
-def simple_converter_for_request(request: Request) -> Any:
-    return request.query
+class SimpleConverterForRequest(ConverterBase):
+    def call(self, request: Request):
+        return request.query
 
 
-def simple_converter_for_response(response: Any) -> "Response":
-    from deliverable_model.response import Response
+simple_converter_for_request = SimpleConverterForRequest()
 
-    return Response(response)
+
+class SimpleConverterForResponse(ConverterBase):
+    def call(self, response: Response):
+        return response.data
+
+
+simple_converter_for_response = SimpleConverterForResponse()
 
 
 class ModelBuilder(object):
@@ -76,6 +84,7 @@ class ModelBuilder(object):
     def _dump_converter(func: Callable) -> dict:
         return {
             "class_name": utils.get_class_fqn_name(func),
+            # TODO this function not exist
             "config": func.get_config(),
         }
 

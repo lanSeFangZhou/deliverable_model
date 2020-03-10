@@ -12,7 +12,9 @@ from deliverable_model.response import Response
 class ConverterForRequest(ConverterBase):
     def call(self, request: Request) -> Any:
         predict_request = PredictRequest()
-        predict_request.inputs["embedding_input"].CopyFrom(tf.make_tensor_proto(request.query, dtype=tf.float32))
+        predict_request.inputs["embedding_input"].CopyFrom(
+            tf.make_tensor_proto(request.query, dtype=tf.float32)
+        )
         return predict_request
 
 

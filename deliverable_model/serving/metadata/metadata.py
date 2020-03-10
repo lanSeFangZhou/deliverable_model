@@ -12,4 +12,4 @@ class Metadata(object):
         return self
 
     def get_meta_content(self) -> MetaContent:
-        return MetaContent(self.metadata['id'])
+        return MetaContent(self.metadata["id"])

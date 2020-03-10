@@ -1,7 +1,7 @@
 from deliverable_model.builder.metadata.metadata_builder import MetadataBuilder
 from deliverable_model.metacontent import MetaContent
 
-
+# python intergrated tools
 def test_build(datadir, tmpdir):
     metadata_builder = MetadataBuilder()
 
@@ -10,6 +10,8 @@ def test_build(datadir, tmpdir):
     metadata_builder.set_meta_content(meta_content)
 
     metadata_builder.save()
+
+    assert metadata_builder.build == True
 
     config = metadata_builder.serialize(None)
 
