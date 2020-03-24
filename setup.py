@@ -17,7 +17,7 @@ requirements = [
     "tqdm",
     "tensorflow>=1.15.0,<2.0.0",
     "seq2annotation",
-    "tensorflow-serving-api"
+    "tensorflow-serving-api>=1.15.0,<2.0.0"
 ]
 
 setup_requirements = ["pytest-runner"]
