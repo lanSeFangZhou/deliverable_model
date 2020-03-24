@@ -25,7 +25,7 @@ class BILUOEncodeProcessor(ProcessorBase):
         return self
 
     def preprocess(self, request: Request) -> Request:
-        # record request
+        # record request for postprocess usage
         self.request_query = request.query
 
         # do nothing
