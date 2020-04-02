@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+import shutil
 
 from deliverable_model.builder.metadata.metadata_builder import MetadataBuilder
 from deliverable_model.builder.model.model_builder import ModelBuilder
@@ -10,6 +11,10 @@ from deliverable_model.utils import create_dir_if_needed
 class DeliverableModelBuilder(object):
     def __init__(self, export_dir: str):
         self.export_dir = Path(export_dir)
+
+        # NOTE: clean export dir by default
+        shutil.rmtree(self.export_dir)
+        self.export_dir.mkdir(parents=True, exist_ok=True)
 
         self.processor_builder: ProcessorBuilder = None
         self.model_builder: ModelBuilder = None
