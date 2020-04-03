@@ -51,11 +51,14 @@ class ProcessorBuilder(object):
         """
         self.preprocess_pipeline.append(processor.processor_instance)
 
-    def add_postprocess(self, processor: ProcessorHandle):
+    def add_postprocess(self, processor: ProcessorHandle, to_head=False):
         """
         Add processor to postprocess pipeline, append to head
         """
-        self.postprocess_pipeline.insert(0, processor.processor_instance)
+        if to_head:
+            self.postprocess_pipeline.insert(0, processor.processor_instance)
+        else:
+            self.postprocess_pipeline.append(processor.processor_instance)
 
     def _gather_dependency(self) -> list:
         dependency = []
