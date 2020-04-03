@@ -13,7 +13,9 @@ class StrTokensConvertProcessor(ProcessorBase):
         return self
 
     def preprocess(self, request: Request) -> Request:
-        return Request(query=[list(i) for i in request.query])
+        request[self.pre_output_key] = [list(i) for i in request[self.pre_input_key]]
+
+        return request
 
     def postprocess(self, response: Response) -> Response:
         # do nothing

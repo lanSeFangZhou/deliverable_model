@@ -6,13 +6,17 @@ from deliverable_model.response import Response
 
 
 class PadProcessor(ProcessorBase):
-    def __init__(self, padding_parameter=None):
+    def __init__(self, padding_parameter=None, **kwargs):
+        super().__init__(**kwargs)
+
         self.padding_parameter = (
             padding_parameter if padding_parameter is not None else {}
         )  # type: Dict[str, str]
 
     def get_config(self):
-        return {"padding_parameter": self.padding_parameter}
+        config =  {"padding_parameter": self.padding_parameter}
+
+        return {**super().get_config(), **config}
 
     @classmethod
     def load(cls, parameter: dict, asset_dir) -> "ProcessorBase":
@@ -27,10 +31,10 @@ class PadProcessor(ProcessorBase):
         import tensorflow as tf
 
         padded_query_id_list = tf.keras.preprocessing.sequence.pad_sequences(
-            request.query, **self.padding_parameter
+            request[self.pre_input_key], **self.padding_parameter
         )
 
-        request.update_query(padded_query_id_list)
+        request[self.pre_output_key] = padded_query_id_list
 
         return request
 
