@@ -4,7 +4,7 @@
 
 __author__ = """Xiaoquan Kong"""
 __email__ = "u1mail2me@gmail.com"
-__version__ = "0.2.0"
+__version__ = "__version__ = '0.3.0'"
 
 import deliverable_model.serving  # for auto registry
 
