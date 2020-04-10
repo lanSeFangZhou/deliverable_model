@@ -11,6 +11,8 @@ from deliverable_model.serving.remote_model.remote_model import RemoteModel
 from deliverable_model.serving.processor.processor import Processor
 from deliverable_model.request import Request
 from deliverable_model.response import Response
+from micro_toolkit.data_process.batch_iterator import BatchingIterator
+from micro_toolkit.data_process.merge_dict_list import merge_dict_list
 
 
 class DeliverableModel(object):
@@ -74,7 +76,23 @@ class DeliverableModel(object):
         for dependency in metadata["dependency"]:
             subprocess.check_call([sys.executable, "-m", "pip", "install", dependency])
 
-    def inference(self, request: Request) -> Response:
+    def inference(self, request: Request, batch_size=None) -> Response:
+        if not batch_size:
+            return self._do_inference(request)
+
+        batcher = BatchingIterator(batch_size)
+
+        sub_response_list = []
+
+        for sub_request_dict in batcher(request):
+            sub_request = Request.from_dict(sub_request_dict)
+            sub_response_list.append(self._do_inference(sub_request))
+
+        response = merge_dict_list(*sub_response_list)
+
+        return Response.from_dict(response)
+
+    def _do_inference(self, request: Request) -> Response:
         request = self._call_preprocessor(request)
         response = self._call_model(request)
         response = self._call_postprocessor(response)
