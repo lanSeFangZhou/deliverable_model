@@ -6,6 +6,14 @@ class Response(dict):
         self.data_history = []
         self["data"] = data
 
+    @classmethod
+    def from_dict(cls, data) -> "Response":
+        self = cls(None)
+        for k, v in data.items():
+            self[k] = v
+
+        return self
+
     @property
     def data(self):
         return self["data"]
