@@ -16,7 +16,7 @@ deliverable_model
 
 
 
-A cross framework machine leaning [D[D[D[D format and API specific for deploying.
+A cross framework machine leaning deliver format and API specific for deploying.
 
 
 * Free software: Apache Software License 2.0
