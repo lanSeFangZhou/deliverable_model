@@ -10,6 +10,14 @@ class Request(dict):
         self.query_history = []
         self["data"] = query
 
+    @classmethod
+    def from_dict(cls, data) -> "Request":
+        self = cls(None)
+        for k, v in data.items():
+            self[k] = v
+
+        return self
+
     @property
     def query(self):
         return self["data"]
