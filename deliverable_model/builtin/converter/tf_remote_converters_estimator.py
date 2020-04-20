@@ -14,7 +14,7 @@ class ConverterForRequest(ConverterBase):
         from micro_toolkit.data_process.text_sequence_padding import TextSequencePadding
 
         tsp = TextSequencePadding("<pad>")
-        data =  {
+        data = {
             "words": tsp.fit(request.query),
             "words_len": [
                 len(list(filter(lambda x: x != 0.0, text))) for text in request.query
@@ -28,7 +28,7 @@ class ConverterForRequest(ConverterBase):
         predict_request.inputs["words_len"].CopyFrom(
             tf.make_tensor_proto(data["words_len"], dtype=tf.int32)
         )
-        return predict_request
+        return [predict_request], {}
 
 
 class ConverterForResponse(ConverterBase):

@@ -7,12 +7,16 @@ from deliverable_model.serving.model.model_loaders.model_loader_base import (
 
 
 class TensorFlowSavedModel(ModelLoaderBase):
+    """
+    Canonical SavedModel, converter must pass `input_dict`` as input key
+    """
+
     name = "tensorflow_saved_model"
 
     @classmethod
     def load(cls, model_path: Path, metadata):
         # TODO(howl-anderson): contrib is not available at TF 2.x and TF enterprise,
-        # find alternative for `predictor`
+        # `predictor` is replaced by tfhub
         from tensorflow.contrib import predictor
 
         concrete_model_path = cls._get_model(model_path)

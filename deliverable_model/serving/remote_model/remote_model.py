@@ -43,9 +43,9 @@ class RemoteModel(object):
         return self
 
     def inference(self, request: Request) -> Response:
-        native_request = self.converter_for_request(request)
+        args, kwargs = self.converter_for_request(request)
 
-        native_response = self.model_loader_instance.inference(native_request)
+        native_response = self.model_loader_instance.inference(*args, **kwargs)
 
         response = self.converter_for_response(native_response)
 

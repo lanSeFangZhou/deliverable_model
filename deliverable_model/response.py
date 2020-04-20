@@ -1,7 +1,9 @@
 from typing import List, Any
 
+from deliverable_model.batch_like_dict import BatchLikeDict
 
-class Response(dict):
+
+class Response(BatchLikeDict):
     def __init__(self, data: List[Any]):
         self.data_history = []
         self["data"] = data

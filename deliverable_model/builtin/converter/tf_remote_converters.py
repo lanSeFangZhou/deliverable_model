@@ -15,7 +15,7 @@ class ConverterForRequest(ConverterBase):
         predict_request.inputs["embedding_input"].CopyFrom(
             tf.make_tensor_proto(request.query, dtype=tf.float32)
         )
-        return predict_request
+        return [predict_request], {}
 
 
 class ConverterForResponse(ConverterBase):
