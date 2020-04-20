@@ -8,6 +8,10 @@ from deliverable_model.serving.model.model_loaders.model_loader_base import (
 
 
 class KerasSavedModel(ModelLoaderBase):
+    """
+    Keras SavedModel, converter must provide `x` as input data key
+    """
+
     name = "keras_saved_model"
 
     @classmethod

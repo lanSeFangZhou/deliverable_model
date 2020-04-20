@@ -77,9 +77,10 @@ class DeliverableModel(object):
             subprocess.check_call([sys.executable, "-m", "pip", "install", dependency])
 
     def inference(self, request: Request, batch_size=None) -> Response:
-        if not batch_size:
+        if not batch_size:  # inference without mini batch
             return self._do_inference(request)
 
+        # inference with batch
         batcher = BatchingIterator(batch_size)
 
         sub_response_list = []

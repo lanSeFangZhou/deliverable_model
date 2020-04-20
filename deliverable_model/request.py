@@ -1,7 +1,9 @@
 from typing import List, Any
 
+from deliverable_model.batch_like_dict import BatchLikeDict
 
-class Request(dict):
+
+class Request(BatchLikeDict):
     """
     Represent a list of request object
     """

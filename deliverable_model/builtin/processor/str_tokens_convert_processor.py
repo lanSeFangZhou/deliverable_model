@@ -6,6 +6,10 @@ from deliverable_model.response import Response
 
 
 class StrTokensConvertProcessor(ProcessorBase):
+    """
+    convert "abc" to ["a", "b", "c"]
+    """
+
     @classmethod
     def load(cls, parameter: dict, asset_dir) -> "ProcessorBase":
         self = cls(**parameter)

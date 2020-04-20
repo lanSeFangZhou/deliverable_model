@@ -38,8 +38,8 @@ class DummyModel(ModelLoaderBase):
 
         return self
 
-    def inference(self, request: Request) -> Response:
-        result = self.predictor_func(request.query)
+    def inference(self, *args, **kwargs) -> Response:
+        result = self.predictor_func(args[0].query)
 
         response = Response(result)
 

@@ -7,7 +7,7 @@ from deliverable_model.response import Response
 
 class ConverterForRequest(ConverterBase):
     def call(self, request: Request) -> Any:
-        return request.query
+        return [request.query], {}
 
 
 class ConverterForResponse(ConverterBase):
