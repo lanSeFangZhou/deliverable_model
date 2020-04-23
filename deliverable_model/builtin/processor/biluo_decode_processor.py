@@ -1,5 +1,6 @@
 from collections import namedtuple
 from pathlib import Path
+import copy
 
 from deliverable_model.processor_base import ProcessorBase
 from deliverable_model.request import Request
@@ -10,7 +11,9 @@ PredictResult = namedtuple("PredictResult", ["sequence", "is_failed", "exec_msg"
 
 
 class BILUOEncodeProcessor(ProcessorBase):
-    def __init__(self, decoder=None):
+    def __init__(self, decoder=None, **kwargs):
+        super().__init__(**kwargs)
+
         self.decoder = decoder
         self.request_query = None
 
@@ -20,22 +23,22 @@ class BILUOEncodeProcessor(ProcessorBase):
 
         decoder = BILUOSequenceEncoderDecoder()
 
-        self = cls(decoder)
+        self = cls(decoder, **parameter)
 
         return self
 
     def preprocess(self, request: Request) -> Request:
-        # record request
-        self.request_query = request.query
+        # record request for postprocess usage
+        self.request_query = copy.deepcopy(request[self.pre_input_key])
 
-        # do nothing
+        # don't change the request
         return request
 
     def postprocess(self, response: Response) -> Response:
         from tokenizer_tools.tagset.exceptions import TagSetDecodeError
         from tokenizer_tools.tagset.offset.sequence import Sequence
 
-        tags_list = response.data
+        tags_list = response[self.post_input_key]
         raw_text_list = self.request_query
 
         infer_result = []
@@ -59,13 +62,9 @@ class BILUOEncodeProcessor(ProcessorBase):
 
             infer_result.append(PredictResult(seq, is_failed, exec_msg))
 
-        response.update_data(infer_result)
+        response[self.post_output_key] = infer_result
 
         return response
-
-    def serialize(self, asset_dir: Path):
-        # do nothing
-        pass
 
     def get_dependency(self) -> list:
         return ["tokenizer_tools"]

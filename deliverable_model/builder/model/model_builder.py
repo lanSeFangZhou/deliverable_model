@@ -5,8 +5,10 @@ from pathlib import Path
 import typing
 from typing import List, Any, Callable
 
+from deliverable_model import utils
+from deliverable_model.converter_base import ConverterBase
 from deliverable_model.request import Request
-from dill import dump
+from deliverable_model.response import Response
 
 if typing.TYPE_CHECKING:
     from deliverable_model.response import Response
@@ -14,14 +16,20 @@ if typing.TYPE_CHECKING:
 ModelInfo = namedtuple("ModelInfo", ["type", "store_dir"])
 
 
-def simple_converter_for_request(request: Request) -> Any:
-    return request.query
+class SimpleConverterForRequest(ConverterBase):
+    def call(self, request: Request):
+        return request.query
 
 
-def simple_converter_for_response(response: Any) -> "Response":
-    from deliverable_model.response import Response
+simple_converter_for_request = SimpleConverterForRequest()
 
-    return Response(response)
+
+class SimpleConverterForResponse(ConverterBase):
+    def call(self, response: Response):
+        return response.data
+
+
+simple_converter_for_response = SimpleConverterForResponse()
 
 
 class ModelBuilder(object):
@@ -73,15 +81,12 @@ class ModelBuilder(object):
         self.converter_for_response = func
 
     @staticmethod
-    def _dump_function(
-        assert_dir: Path, serialized_file_name: str, func: Callable
-    ) -> str:
-        serialized_file = assert_dir / serialized_file_name
-
-        with serialized_file.open("wb") as fd:
-            dump(func, fd)
-
-        return serialized_file_name
+    def _dump_converter(func: Callable) -> dict:
+        return {
+            "class_name": utils.get_class_fqn_name(func),
+            # TODO this function not exist
+            "config": func.get_config(),
+        }
 
     def save(self):
         self.build = True
@@ -93,14 +98,10 @@ class ModelBuilder(object):
 
         return {
             "version": self.version,
-            "type": self.model[0],
+            "type": self.model.type,
             "custom_object_dependency": self.custom_object_dependency,
-            "converter_for_request": self._dump_function(
-                asset_dir, "converter_for_request", self.converter_for_request
-            ),
-            "converter_for_response": self._dump_function(
-                asset_dir, "converter_for_response", self.converter_for_response
-            ),
+            "converter_for_request": self._dump_converter(self.converter_for_request),
+            "converter_for_response": self._dump_converter(self.converter_for_response),
         }
 
     def get_dependency(self):

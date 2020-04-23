@@ -17,6 +17,7 @@ requirements = [
     "tqdm",
     "tensorflow>=1.15.0,<2.0.0",
     "seq2annotation",
+    "tensorflow-serving-api>=1.15.0,<2.0.0"
 ]
 
 setup_requirements = ["pytest-runner"]
@@ -51,6 +52,6 @@ setup(
     test_suite="tests",
     tests_require=test_requirements,
     url="https://github.com/howl-anderson/deliverable_model",
-    version="0.2.0",
+    version="0.4.1",
     zip_safe=False,
 )

@@ -1,29 +1,20 @@
 {
     "version": "1.0",
-    "dependency": [
-        "seq2annotation",
-        "tensorflow"
-    ],
+    "dependency": [],
     "processor": {
         "version": "1.0",
         "instance": {
-            "LookupProcessor_0": {
-                "class": "deliverable_model.builtin.processor.lookup_processor.LookupProcessor",
-                "parameter": {
-                    "lookup_table": [
-                        "vocabulary",
-                        "tag"
-                    ],
-                    "padding_parameter": {}
-                }
+            "Processor_0": {
+                "class": "",
+                "parameter": {}
             }
         },
         "pipeline": {
             "pre": [
-                "LookupProcessor_0"
+                "Processor_0"
             ],
             "post": [
-                "LookupProcessor_0"
+                "Processor_0"
             ]
         }
     },

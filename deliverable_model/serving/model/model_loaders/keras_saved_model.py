@@ -2,10 +2,16 @@ from pathlib import Path
 
 import tensorflow as tf
 
-from deliverable_model.serving.model.model_loaders.model_loader_base import ModelLoaderBase
+from deliverable_model.serving.model.model_loaders.model_loader_base import (
+    ModelLoaderBase,
+)
 
 
 class KerasSavedModel(ModelLoaderBase):
+    """
+    Keras SavedModel, converter must provide `x` as input data key
+    """
+
     name = "keras_saved_model"
 
     @classmethod

@@ -7,10 +7,16 @@ from deliverable_model.serving.model.model_loaders.model_loader_base import (
 
 
 class TensorFlowSavedModel(ModelLoaderBase):
+    """
+    Canonical SavedModel, converter must pass `input_dict`` as input key
+    """
+
     name = "tensorflow_saved_model"
 
     @classmethod
     def load(cls, model_path: Path, metadata):
+        # TODO(howl-anderson): contrib is not available at TF 2.x and TF enterprise,
+        # `predictor` is replaced by tfhub
         from tensorflow.contrib import predictor
 
         concrete_model_path = cls._get_model(model_path)
@@ -27,6 +33,13 @@ class TensorFlowSavedModel(ModelLoaderBase):
 
     @staticmethod
     def _find_most_recent_model(model_path: Path) -> Path:
+        """
+        find most recent model by directory name.
+
+        In saved model, model directories are named after export date-time,
+        such like `202002280029`.
+        """
+
         def get_version(model_path: Path) -> Union[int, None]:
             dir_name = model_path.name
             if dir_name.isnumeric():

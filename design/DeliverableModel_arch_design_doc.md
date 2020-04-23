@@ -52,16 +52,6 @@ processor 负责直接接受外界请求并负责返回结果以及这中间的�
         "package_a >= min_version < max_version",
         "package_b >= min_version < max_version"
     ]
-    "model": {
-        "type": "tensorflow_saved_model",
-        "version": "1.0"，
-        "custom_object_dependency": [
-            "extra_package_a",
-            "extra_package_b"
-        ],
-        "converter_for_request": "",
-        "converter_for_response": ""
-    }
     "processor": {
         "version": "1.0"
         "instance": {
@@ -85,6 +75,52 @@ processor 负责直接接受外界请求并负责返回结果以及这中间的�
             ]
         }
     },
+    "model": {
+        "type": "tensorflow_saved_model",
+        "version": "1.0"，
+        "custom_object_dependency": [
+            "extra_package_a",
+            "extra_package_b"
+        ],
+        "converter_for_request": {
+            "class_name": "xx.y",
+            "config": {
+                "arg_a": 1,
+                "arg_b": 2
+            }
+
+        },
+        "converter_for_response": {
+            "class_name": "xx.z",
+            "config": {
+                "arg_a": 1,
+                "arg_b": 2
+            }
+        }
+    },
+    "remote_model": {
+        "type": "tensorflow_saved_model",
+        "version": "1.0"，
+        "custom_object_dependency": [
+            "extra_package_a",
+            "extra_package_b"
+        ],
+        "converter_for_request": {
+            "class_name": "xx.y",
+            "config": {
+                "arg_a": 1,
+                "arg_b": 2
+            }
+
+        },
+        "converter_for_response": {
+            "class_name": "xx.z",
+            "config": {
+                "arg_a": 1,
+                "arg_b": 2
+            }
+        }
+    },
     "metadata": {
         "version": "1.0"
         "id": "AlgorithmID-CorpusID-ConfigureID-RunID"
@@ -96,7 +132,7 @@ processor 负责直接接受外界请求并负责返回结果以及这中间的�
 
 容器最重要的字段是 version 表示当前的 DeliverableModel 的版本，在解析 metadata.json 时应检查版本，确保兼容。当前版本为 ”1.0“。
 
-1.0 版本的 DeliverableModel 包含子容器：dependency、model、processor 和 metadata。后有详述。
+1.0 版本的 DeliverableModel 包含子容器：dependency、model、remote_model、processor 和 metadata。后有详述。
 
 
 #### dependency
@@ -116,10 +152,20 @@ type 定义了模型的类型，对应后续的 backend；
 
 custom_object_dependency 表示所依赖的自定义组件；
 
-converter_for_request、converter_for_response 分别定义了模型推理前后的最后转化函数，表示如何将 request 对象转换成模型可以直接使用的原始数据，以及将模型输出的原始结果转换成 response 对象。函数使用文件的形式序列化下来。
+converter_for_request、converter_for_response 分别定义了模型推理前后的最后转化方案，表示如何将 request 对象转换成模型可以直接使用的原始数据，以及将模型输出的原始结果转换成 response 对象。
+序列化时采用的是，将类名以及配置固定下来的方案
 
 而 version 字段用于表示当前序列在磁盘中的模型的格式版本。不同的版本间可能不兼容。
 
+#### remote_model
+
+remote_model 容器定义了当前 DeliverableModel 所使用的远程模型通讯方式。
+
+remote_model 容器有字段：type 、custom_object_dependency、converter_for_request、converter_for_response 和 version。
+
+type 定义了模型的类型，对应后续的 channel；
+
+custom_object_dependency、converter_for_request、converter_for_response、version 字段的作用和 remote 字段作用相同。
 
 #### processor
 
@@ -140,7 +186,6 @@ metadata 用于表示这个模型的特性，所用的：代码、语料和参�
 
 当前版本只有一个字段：id，字符串类型。id 由三个 “-” 分割成四个部分。第一部分是：AlgorithmID，用于标志算法代码。第二部分是：CorpusID，用于标志语料。第三部分：ConfigureID，用于标志配置。第四部分：RunID，用于标志具体的执行。
 
-
 ### processor（处理器）
 
 一个 Python 模块，需要加入搜索路径，用于自动载入。
@@ -149,7 +194,6 @@ metadata 用于表示这个模型的特性，所用的：代码、语料和参�
 ### Model Loader
 
 其他目录，这些目录会被模型载入器使用。目前预定义的三个 model loader 是
-
 
 #### tensorflow_saved_model
 
@@ -191,7 +235,7 @@ import deliverable_model as dm
 
 kwargs  # kwargs 是请求的实际参数
 
-request = dm.make_request(**kwargs)
+request = dm.make_request(query=[kwargs])  # deliverable support batch inference
 
 request  # request 是 Request 对象
 ```
@@ -220,7 +264,7 @@ response  # response 是 Response 对象
 ```python
 import deliverable_model as dm
 
-meta_content = dm.metadata("/path/to/deliverable_model_dir")
+meta_content = dm.get_metadata("/path/to/deliverable_model_dir")
 
 meta_content  # meta_content 是 MetaContent 对象
 ```
@@ -242,7 +286,7 @@ Remote Wrapper 模式是指模型的前置和后置处理部分在一个进程�
 import deliverable_model as dm
 
 model = dm.load("/path/to/deliverable_model")
-request = dm.make_request(input="查询明天的天气")
+request = dm.make_request(query=["查询明天的天气"])
 
 result = model.inference(request)
 
@@ -265,7 +309,7 @@ python -m deliverable_model.get_saved_model /path/to/deliverable_model
 ###### 启动 TensorFlow Serving
 
 ```bash
-docker run -t --rm -p 8501:8501 -p 8500:8500 -v "/path/to/deliverable_model/saved_model:/models/ner" -e MODLE_NAME=ner google/tensorflow-serving --enable_batching --batching_parameters_file="/models/ner/batching_parameters_file"
+docker run -it --rm -p 8501:8501 -p 8500:8500 -v "/path/to/deliverable_model/saved_model:/models/ner" -e MODLE_NAME=ner tensorflow/serving"
 ```
 
 ##### 使用 Remote Wrapper
@@ -274,12 +318,15 @@ import os
 
 import deliverable_mode as dm
 
-model_endpoint = dm.make_model_endpoint("grpc://ner:serving_default@localhost:8500")
-request = dm.make_request(input="查询明天的天气")
+model_endpoint = dm.make_model_endpoint(
+    "tf+grpc://ner:serving_default@localhost:8500",
+    converter_for_request="module.class",
+    converter_for_response="module.class"
+)
 
 model = dm.load("/path/to/deliverable_model", model_endpiont=model_endpoint)
 
-request = dm.make_request(input="查询明天的天气")
+request = dm.make_request(query=["查询明天的天气"])
 
 result = model.inference(request)
 

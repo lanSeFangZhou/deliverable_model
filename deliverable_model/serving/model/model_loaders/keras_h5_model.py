@@ -2,10 +2,16 @@ from pathlib import Path
 
 import tensorflow as tf
 
-from deliverable_model.serving.model.model_loaders.model_loader_base import ModelLoaderBase
+from deliverable_model.serving.model.model_loaders.model_loader_base import (
+    ModelLoaderBase,
+)
 
 
 class KerasH5Model(ModelLoaderBase):
+    """
+    Keras H5 model, converter must provide `x` as input data key
+    """
+
     name = "keras_h5_model"
 
     @classmethod
