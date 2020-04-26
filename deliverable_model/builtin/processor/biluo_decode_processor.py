@@ -37,6 +37,7 @@ class BILUOEncodeProcessor(ProcessorBase):
     def postprocess(self, response: Response) -> Response:
         from tokenizer_tools.tagset.exceptions import TagSetDecodeError
         from tokenizer_tools.tagset.offset.sequence import Sequence
+        from tokenizer_tools.tagset.offset.document import Document
 
         tags_list = response[self.post_input_key]
         raw_text_list = self.request_query
@@ -60,7 +61,9 @@ class BILUOEncodeProcessor(ProcessorBase):
                 seq = Sequence(raw_text)
                 is_failed = True
 
-            infer_result.append(PredictResult(seq, is_failed, exec_msg))
+            doc = Document(text=seq.text, span_set=seq.span_set)
+
+            infer_result.append(PredictResult(doc, is_failed, exec_msg))
 
         response[self.post_output_key] = infer_result
 
