@@ -14,7 +14,7 @@ class ProcessorBase(object):
         self.post_input_key = kwargs.get("post_input_key", self.input_key)
         self.post_output_key = kwargs.get("post_output_key", self.output_key)
 
-    def get_config(self):
+    def get_config(self) -> dict:
         return {
             "pre_input_key": self.pre_input_key,
             "pre_output_key": self.pre_output_key,
@@ -22,7 +22,8 @@ class ProcessorBase(object):
             "post_output_key": self.post_output_key,
         }
 
-    def load(self, parameter: dict, asset_dir: Path) -> "ProcessorBase":
+    @classmethod
+    def load(cls, parameter: dict, asset_dir: Path) -> "ProcessorBase":
         raise NotImplementedError
 
     def preprocess(self, request: Request) -> Request:
