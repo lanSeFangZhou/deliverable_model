@@ -39,3 +39,7 @@ def test_serving(datadir):
         assert np.all(
             response.data == [["tag-a", "tag-b", "tag-c"], ["tag-c", "tag-b", "tag-a"]]
         )
+
+
+def test_batch_inference():
+    pass

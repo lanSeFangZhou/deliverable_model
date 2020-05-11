@@ -8,7 +8,7 @@ from deliverable_model.request import Request
 from deliverable_model.response import Response
 
 if typing.TYPE_CHECKING:
-    from seq2annotation.input import Lookuper
+    from nlp_utils.preprocess.lookup_table import LookupTable as Lookuper
 
 
 class LookupProcessor(ProcessorBase):
@@ -19,10 +19,12 @@ class LookupProcessor(ProcessorBase):
 
     @classmethod
     def load(cls, parameter: dict, asset_dir) -> "ProcessorBase":
-        from seq2annotation.input import Lookuper
+        from nlp_utils.preprocess.lookup_table import LookupTable as Lookuper
+
+        config = parameter.pop("config", {})
 
         instance_asset = asset_dir / "data"
-        lookup_table = Lookuper.load_from_file(instance_asset)
+        lookup_table = Lookuper.load_from_file(instance_asset, **config)
 
         self = cls(lookup_table, **parameter)
 
@@ -48,9 +50,15 @@ class LookupProcessor(ProcessorBase):
 
         return response
 
+    def get_config(self) -> dict:
+        base_config = super().get_config()
+        config = self.lookup_table.get_config()
+
+        return {**base_config, **config}
+
     def serialize(self, asset_dir: Path):
         instance_asset = asset_dir / "data"
         self.lookup_table.dump_to_file(instance_asset)
 
     def get_dependency(self) -> list:
-        return ["seq2annotation"]
+        return ["nlp_utils"]

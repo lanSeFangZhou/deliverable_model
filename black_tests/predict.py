@@ -1,8 +1,11 @@
 import deliverable_model as dm
+import sys
 
-model = dm.load("./deliverable_model_dir")
+model_dir = sys.argv[1]
 
-request = dm.make_request(query=["明天天气如何", "打开收音机"])
+model = dm.load(model_dir)
+
+request = dm.make_request(query=["明天天气如何", "上海明天天气"])
 
 result = model.inference(request)
 
