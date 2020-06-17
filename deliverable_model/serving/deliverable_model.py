@@ -25,13 +25,16 @@ class DeliverableModel(object):
         self.metadata_object = None  # type: Metadata
 
     @classmethod
-    def load(cls, model_path, model_endpoint=None) -> "DeliverableModel":
+    def load(
+        cls, model_path, model_endpoint=None, install_dependencies=True
+    ) -> "DeliverableModel":
         model_path = Path(model_path)
         model_metadata = cls._load_metadata(model_path)
 
         cls._check_compatible(model_metadata)
 
-        cls._install_dependency(model_metadata)
+        if install_dependencies:
+            cls._install_dependency(model_metadata)
 
         self = cls(model_path, model_metadata)
 
